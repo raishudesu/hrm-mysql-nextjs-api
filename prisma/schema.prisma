@@ -1,0 +1,271 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Relatives {
+  idrelatives         Int                   @id
+  first_name          String                @db.VarChar(45)
+  middle_name         String?               @db.VarChar(45)
+  last_name           String                @db.VarChar(45)
+  name_extension      String                @db.VarChar(5)
+  Occupation          String                @db.VarChar(45)
+  Emp_business        String                @db.VarChar(45)
+  business_address    String                @db.VarChar(100)
+  telephone           String                @db.VarChar(45)
+  birthdate           DateTime              @db.Date
+  employees_relatives employees_relatives[]
+}
+
+model contract_types {
+  idcontract_types        Int               @id
+  contract_classification String?           @db.VarChar(45)
+  contract_description    String?           @db.VarChar(45)
+  service_records         service_records[]
+}
+
+model departments {
+  iddepartments             Int                         @id
+  dept_name                 String                      @db.VarChar(45)
+  employees_unitassignments employees_unitassignments[]
+}
+
+model employees {
+  idemployees                Int                          @id
+  first_name                 String                       @db.VarChar(45)
+  middle_name                String?                      @db.VarChar(45)
+  last_name                  String                       @db.VarChar(45)
+  name_extension             String?                      @db.VarChar(5)
+  birthdate                  DateTime                     @db.Date
+  birth_city                 String                       @db.VarChar(45)
+  birth_province             String                       @db.VarChar(45)
+  birth_country              String                       @db.VarChar(45)
+  sex                        String                       @db.VarChar(7)
+  civil_status               String                       @db.VarChar(10)
+  height_in_meter            Float                        @db.Float
+  weight_in_kg               Float                        @db.Float
+  contactno                  String                       @db.VarChar(45)
+  blood_type                 String                       @db.VarChar(45)
+  gsis_no                    String?                      @db.VarChar(45)
+  sss_no                     String?                      @db.VarChar(45)
+  philhealthno               String?                      @db.VarChar(45)
+  tin                        String                       @db.VarChar(45)
+  employee_no                Int
+  citizenship                String                       @db.VarChar(45)
+  res_spec_address           String?                      @db.VarChar(45)
+  res_street_address         String?                      @db.VarChar(45)
+  res_vill_address           String?                      @db.VarChar(45)
+  res_barangay_address       String                       @db.VarChar(45)
+  res_city                   String                       @db.VarChar(45)
+  res_municipality           String                       @db.VarChar(45)
+  res_province               String                       @db.VarChar(45)
+  res_zipcode                String                       @db.VarChar(45)
+  perm_spec_address          String?                      @db.VarChar(45)
+  perm_street_address        String?                      @db.VarChar(45)
+  perm_vill_address          String?                      @db.VarChar(45)
+  perm_barangay_address      String                       @db.VarChar(45)
+  perm_city                  String                       @db.VarChar(45)
+  perm_municipality          String                       @db.VarChar(45)
+  perm_province              String                       @db.VarChar(45)
+  perm_zipcode               String                       @db.VarChar(45)
+  telephone                  String?                      @db.VarChar(45)
+  mobile_no                  String                       @db.VarChar(15)
+  email                      String?                      @db.VarChar(45)
+  Q34A                       Int                          @db.TinyInt
+  Q34B                       Int                          @db.TinyInt
+  Q34_details                String?                      @db.VarChar(45)
+  Q35a                       Int                          @db.TinyInt
+  Q35b                       Int                          @db.TinyInt
+  Q35_details                String?                      @db.VarChar(45)
+  Q36                        String                       @db.VarChar(45)
+  Q36_details                String?                      @db.VarChar(45)
+  Q37                        Int                          @db.TinyInt
+  Q37_details                String?                      @db.VarChar(45)
+  Q38a                       Int                          @db.TinyInt
+  Q38b                       Int                          @db.TinyInt
+  Q38_details                String?                      @db.VarChar(45)
+  Q39a                       Int                          @db.TinyInt
+  Q39b                       Int                          @db.TinyInt
+  Q39_details                String?                      @db.VarChar(45)
+  Q40a                       Int                          @db.TinyInt
+  Q40a_details               String?                      @db.VarChar(45)
+  Q40b                       Int                          @db.TinyInt
+  Q40b_details               String?                      @db.VarChar(45)
+  Q40c                       Int                          @db.TinyInt
+  Q40c_details               String?                      @db.VarChar(45)
+  employees_education        employees_education[]
+  employees_ext_involvements employees_ext_involvements[]
+  employees_has_trainings    employees_has_trainings[]
+  employees_prof_eligibility employees_prof_eligibility[]
+  employees_relatives        employees_relatives[]
+  employees_unitassignments  employees_unitassignments[]
+  service_records            service_records[]
+  skills_has_employees       skills_has_employees[]
+}
+
+model employees_education {
+  institutions_idinstitutions Int
+  employees_idemployees       Int
+  Education_degree            String       @db.VarChar(45)
+  start_period                DateTime     @db.Date
+  end_period                  DateTime     @db.Date
+  units_earned                Int
+  year_graduated              DateTime     @db.Date
+  scholarships                String       @db.VarChar(100)
+  acad_honors                 String       @db.VarChar(100)
+  employees                   employees    @relation(fields: [employees_idemployees], references: [idemployees], onDelete: NoAction, onUpdate: NoAction, map: "fk_institutions_has_employees_employees1")
+  institutions                institutions @relation(fields: [institutions_idinstitutions], references: [idinstitutions], onDelete: NoAction, onUpdate: NoAction, map: "fk_institutions_has_employees_institutions1")
+
+  @@id([institutions_idinstitutions, employees_idemployees])
+  @@index([employees_idemployees], map: "fk_institutions_has_employees_employees1_idx")
+  @@index([institutions_idinstitutions], map: "fk_institutions_has_employees_institutions1_idx")
+}
+
+model employees_ext_involvements {
+  employees_idemployees       Int
+  institutions_idinstitutions Int
+  involvement_type            String       @db.VarChar(45)
+  start_date                  DateTime     @db.Date
+  end_date                    DateTime     @db.Date
+  no_hours                    Int
+  work_nature                 String       @default("not applicable") @db.VarChar(45)
+  employees                   employees    @relation(fields: [employees_idemployees], references: [idemployees], onDelete: NoAction, onUpdate: NoAction, map: "fk_employees_has_institutions_employees1")
+  institutions                institutions @relation(fields: [institutions_idinstitutions], references: [idinstitutions], onDelete: NoAction, onUpdate: NoAction, map: "fk_employees_has_institutions_institutions1")
+
+  @@id([employees_idemployees, institutions_idinstitutions])
+  @@index([employees_idemployees], map: "fk_employees_has_institutions_employees1_idx")
+  @@index([institutions_idinstitutions], map: "fk_employees_has_institutions_institutions1_idx")
+}
+
+model employees_has_trainings {
+  employees_idemployees Int
+  trainings_idtrainings Int
+  participation_type    String    @db.VarChar(45)
+  employees             employees @relation(fields: [employees_idemployees], references: [idemployees], onDelete: NoAction, onUpdate: NoAction, map: "fk_employees_has_trainings_employees1")
+  trainings             trainings @relation(fields: [trainings_idtrainings], references: [idtrainings], onDelete: NoAction, onUpdate: NoAction, map: "fk_employees_has_trainings_trainings1")
+
+  @@id([employees_idemployees, trainings_idtrainings])
+  @@index([employees_idemployees], map: "fk_employees_has_trainings_employees1_idx")
+  @@index([trainings_idtrainings], map: "fk_employees_has_trainings_trainings1_idx")
+}
+
+model employees_prof_eligibility {
+  professional_exams_idprofessional_exams Int
+  employees_idemployees                   Int
+  rating                                  Float              @db.Float
+  exam_date                               DateTime           @db.Date
+  exam_place                              String             @db.VarChar(100)
+  license_no                              String             @db.VarChar(45)
+  license_validity                        DateTime           @db.Date
+  employees                               employees          @relation(fields: [employees_idemployees], references: [idemployees], onDelete: NoAction, onUpdate: NoAction, map: "fk_professional_exams_has_employees_employees1")
+  professional_exams                      professional_exams @relation(fields: [professional_exams_idprofessional_exams], references: [idprofessional_exams], onDelete: NoAction, onUpdate: NoAction, map: "fk_professional_exams_has_employees_professional_exams1")
+
+  @@id([professional_exams_idprofessional_exams, employees_idemployees])
+  @@index([employees_idemployees], map: "fk_professional_exams_has_employees_employees1_idx")
+  @@index([professional_exams_idprofessional_exams], map: "fk_professional_exams_has_employees_professional_exams1_idx")
+}
+
+model employees_relatives {
+  Relatives_idrelatives Int
+  employees_idemployees Int
+  relationship          String    @db.VarChar(45)
+  Relatives             Relatives @relation(fields: [Relatives_idrelatives], references: [idrelatives], onDelete: NoAction, onUpdate: NoAction, map: "fk_Relatives_has_employees_Relatives1")
+  employees             employees @relation(fields: [employees_idemployees], references: [idemployees], onDelete: NoAction, onUpdate: NoAction, map: "fk_Relatives_has_employees_employees1")
+
+  @@id([Relatives_idrelatives, employees_idemployees])
+  @@index([Relatives_idrelatives], map: "fk_Relatives_has_employees_Relatives1_idx")
+  @@index([employees_idemployees], map: "fk_Relatives_has_employees_employees1_idx")
+}
+
+model employees_unitassignments {
+  employees_idemployees     Int
+  departments_iddepartments Int
+  transfer_date             DateTime    @db.Date
+  departments               departments @relation(fields: [departments_iddepartments], references: [iddepartments], onDelete: NoAction, onUpdate: NoAction, map: "fk_employees_has_departments_departments1")
+  employees                 employees   @relation(fields: [employees_idemployees], references: [idemployees], onDelete: NoAction, onUpdate: NoAction, map: "fk_employees_has_departments_employees1")
+
+  @@id([employees_idemployees, departments_iddepartments])
+  @@index([departments_iddepartments], map: "fk_employees_has_departments_departments1_idx")
+  @@index([employees_idemployees], map: "fk_employees_has_departments_employees1_idx")
+}
+
+model institutions {
+  idinstitutions             Int                          @id
+  institution_name           String                       @db.VarChar(100)
+  employees_education        employees_education[]
+  employees_ext_involvements employees_ext_involvements[]
+  service_records            service_records[]
+  trainings                  trainings[]
+}
+
+model job_positions {
+  idjob_positions Int               @id
+  job_category    String            @db.VarChar(45)
+  Job_description String            @db.VarChar(45)
+  service_records service_records[]
+}
+
+model professional_exams {
+  idprofessional_exams       Int                          @id
+  Exam_description           String                       @db.VarChar(100)
+  employees_prof_eligibility employees_prof_eligibility[]
+}
+
+model service_records {
+  employees_idemployees           Int
+  job_positions_idjob_positions   Int
+  appointment_start_date          DateTime       @db.Date
+  appointment_end_date            DateTime       @db.Date
+  institutions_idinstitutions     Int
+  monthly_salary                  Float
+  pay_grade                       String         @db.VarChar(45)
+  contract_types_idcontract_types Int
+  gov_service                     Int            @db.TinyInt
+  employees                       employees      @relation(fields: [employees_idemployees], references: [idemployees], onDelete: NoAction, onUpdate: NoAction, map: "fk_employees_has_job_positions_employees")
+  job_positions                   job_positions  @relation(fields: [job_positions_idjob_positions], references: [idjob_positions], onDelete: NoAction, onUpdate: NoAction, map: "fk_employees_has_job_positions_job_positions1")
+  contract_types                  contract_types @relation(fields: [contract_types_idcontract_types], references: [idcontract_types], onDelete: NoAction, onUpdate: NoAction, map: "fk_service_records_contract_types1")
+  institutions                    institutions   @relation(fields: [institutions_idinstitutions], references: [idinstitutions], onDelete: NoAction, onUpdate: NoAction, map: "fk_service_records_institutions1")
+
+  @@id([employees_idemployees, job_positions_idjob_positions])
+  @@index([employees_idemployees], map: "fk_employees_has_job_positions_employees_idx")
+  @@index([job_positions_idjob_positions], map: "fk_employees_has_job_positions_job_positions1_idx")
+  @@index([contract_types_idcontract_types], map: "fk_service_records_contract_types1_idx")
+  @@index([institutions_idinstitutions], map: "fk_service_records_institutions1_idx")
+}
+
+model skills {
+  idskills             Int                    @id
+  skill_type           String                 @db.VarChar(45)
+  skill_description    String                 @db.VarChar(45)
+  skills_has_employees skills_has_employees[]
+}
+
+model skills_has_employees {
+  skills_idskills       Int
+  employees_idemployees Int
+  skill_level           String?   @db.VarChar(45)
+  employees             employees @relation(fields: [employees_idemployees], references: [idemployees], onDelete: NoAction, onUpdate: NoAction, map: "fk_skills_has_employees_employees1")
+  skills                skills    @relation(fields: [skills_idskills], references: [idskills], onDelete: NoAction, onUpdate: NoAction, map: "fk_skills_has_employees_skills1")
+
+  @@id([skills_idskills, employees_idemployees])
+  @@index([employees_idemployees], map: "fk_skills_has_employees_employees1_idx")
+  @@index([skills_idskills], map: "fk_skills_has_employees_skills1_idx")
+}
+
+model trainings {
+  idtrainings                 Int                       @id
+  training_venue              String                    @db.VarChar(45)
+  training_type               String                    @db.VarChar(45)
+  start_date                  DateTime                  @db.Date
+  end_date                    DateTime                  @db.Date
+  training_title              String                    @db.VarChar(45)
+  institutions_idinstitutions Int
+  employees_has_trainings     employees_has_trainings[]
+  institutions                institutions              @relation(fields: [institutions_idinstitutions], references: [idinstitutions], onDelete: NoAction, onUpdate: NoAction, map: "fk_trainings_institutions1")
+
+  @@index([institutions_idinstitutions], map: "fk_trainings_institutions1_idx")
+}
