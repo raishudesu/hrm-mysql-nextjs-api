@@ -1,9 +1,14 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../../prisma/db";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-
+import { middleware } from "../../../lib/middleware";
 export async function GET(req: Request, { params }: { params: Params }) {
   const { id } = params;
+
+  const auth = await middleware(req);
+  const res = JSON.parse(auth);
+
+  if (!res.ok) return NextResponse.json(res, { status: 401 });
 
   try {
     const employee = await prisma.employees.findFirst({

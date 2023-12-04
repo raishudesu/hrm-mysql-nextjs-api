@@ -279,7 +279,7 @@ model students {
 }
 
 model admins {
-  id       Int     @id
-  username String? @db.Text
-  password String? @db.Text
+  id       Int    @id @default(autoincrement())
+  username String @unique(map: "username_UNIQUE") @db.VarChar(45)
+  password String @db.VarChar(255)
 }
