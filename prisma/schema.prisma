@@ -205,7 +205,7 @@ model institutions {
 model job_positions {
   idjob_positions Int               @id
   job_category    String            @db.VarChar(45)
-  Job_description String            @db.VarChar(45)
+  Job_description String            @db.VarChar(500)
   service_records service_records[]
 }
 
@@ -240,7 +240,7 @@ model service_records {
 model skills {
   idskills             Int                    @id
   skill_type           String                 @db.VarChar(45)
-  skill_description    String                 @db.VarChar(45)
+  skill_description    String                 @db.VarChar(500)
   skills_has_employees skills_has_employees[]
 }
 
@@ -268,4 +268,18 @@ model trainings {
   institutions                institutions              @relation(fields: [institutions_idinstitutions], references: [idinstitutions], onDelete: NoAction, onUpdate: NoAction, map: "fk_trainings_institutions1")
 
   @@index([institutions_idinstitutions], map: "fk_trainings_institutions1_idx")
+}
+
+model students {
+  idstudents Int     @id @default(autoincrement())
+  Program    String? @db.VarChar(45)
+  Block      Int?
+  last_name  String? @db.VarChar(45)
+  first_name String? @db.VarChar(45)
+}
+
+model admins {
+  id       Int     @id
+  username String? @db.Text
+  password String? @db.Text
 }
