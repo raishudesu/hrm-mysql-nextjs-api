@@ -9,19 +9,14 @@ export async function GET(req: NextRequest) {
 
     if (!res.ok) return NextResponse.json(res, { status: 401 });
 
-    const employees = await prisma.employees.findMany({
-      take: 10,
+    const reports = await prisma.reports.findMany({
+      include: {
+        users: true,
+      },
     });
 
-    return NextResponse.json({ ok: true, employees }, { status: 200 });
+    return NextResponse.json({ ok: true, reports }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ ok: false, error }, { status: 500 });
   }
 }
-
-/* 
-MYSQL QUERY EQUIVALENT
-
-SELECT * FROM EMPLOYEES
-
-*/

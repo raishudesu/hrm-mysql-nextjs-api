@@ -104,6 +104,7 @@ model employees {
   employees_relatives        employees_relatives[]
   employees_unitassignments  employees_unitassignments[]
   service_records            service_records[]
+  sick_leave_requests        sick_leave_requests[]
   skills_has_employees       skills_has_employees[]
 }
 
@@ -282,4 +283,58 @@ model admins {
   id       Int    @id @default(autoincrement())
   username String @unique(map: "username_UNIQUE") @db.VarChar(45)
   password String @db.VarChar(255)
+}
+
+model reports {
+  documentID      Int       @id @default(autoincrement())
+  createTimeAt    DateTime? @db.Time(0)
+  createdDateAt   DateTime? @db.Date
+  dateAndTime     DateTime? @db.DateTime(0)
+  details         String?   @db.VarChar(255)
+  fileStatus      Int?
+  nameToReport    String?   @db.VarChar(255)
+  placeOfTheEvent String?   @db.VarChar(255)
+  status          Int?
+  uid             Int?
+  violation       String?   @db.VarChar(255)
+  users           users?    @relation(fields: [uid], references: [uid], onDelete: NoAction, onUpdate: NoAction, map: "userId")
+
+  @@index([uid], map: "userId_idx")
+}
+
+model sick_leave_calendar {
+  calendar_id         Int                  @id @default(autoincrement())
+  leave_id            Int?
+  date_approved       DateTime?            @db.Date
+  employee_status     String?              @db.VarChar(255)
+  sick_leave_requests sick_leave_requests? @relation(fields: [leave_id], references: [leave_id], onDelete: NoAction, onUpdate: NoAction, map: "sick_leave_calendar_ibfk_1")
+
+  @@index([leave_id], map: "leave_id")
+}
+
+model sick_leave_requests {
+  leave_id            Int                   @id @default(autoincrement())
+  idemployees         Int?
+  start_date          DateTime?             @db.Date
+  end_date            DateTime?             @db.Date
+  request_status      String?               @db.VarChar(255)
+  reason              String?               @db.Text
+  attachment_link     String?               @db.VarChar(255)
+  managers_comment    String?               @db.Text
+  created_at          DateTime?             @default(now()) @db.Timestamp(0)
+  updated_at          DateTime?             @default(now()) @db.Timestamp(0)
+  sick_leave_calendar sick_leave_calendar[]
+  employees           employees?            @relation(fields: [idemployees], references: [idemployees], onDelete: NoAction, onUpdate: NoAction, map: "sick_leave_requests_ibfk_1")
+
+  @@index([idemployees], map: "idemployees")
+}
+
+model users {
+  uid          Int       @id @default(autoincrement())
+  email        String?   @db.VarChar(255)
+  isRegistered Int?
+  isSuperUser  Int?
+  password     String?   @db.VarChar(255)
+  status       Int?
+  reports      reports[]
 }
