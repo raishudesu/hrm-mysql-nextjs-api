@@ -106,6 +106,7 @@ model employees {
   service_records            service_records[]
   sick_leave_requests        sick_leave_requests[]
   skills_has_employees       skills_has_employees[]
+  users                      users?
 }
 
 model employees_education {
@@ -336,5 +337,9 @@ model users {
   isSuperUser  Int?
   password     String?   @db.VarChar(255)
   status       Int?
+  idemployee   Int       @unique(map: "idemployee_UNIQUE")
   reports      reports[]
+  employees    employees @relation(fields: [idemployee], references: [idemployees], onDelete: NoAction, onUpdate: NoAction, map: "idemployee")
+
+  @@index([idemployee], map: "idemployee_idx")
 }

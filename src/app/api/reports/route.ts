@@ -11,7 +11,11 @@ export async function GET(req: NextRequest) {
 
     const reports = await prisma.reports.findMany({
       include: {
-        users: true,
+        users: {
+          include: {
+            employees: true,
+          },
+        },
       },
     });
 
