@@ -107,6 +107,7 @@ model employees {
   sick_leave_requests        sick_leave_requests[]
   skills_has_employees       skills_has_employees[]
   users                      users?
+  users_for_employee         users_for_employee[]
 }
 
 model employees_education {
@@ -342,4 +343,42 @@ model users {
   employees    employees @relation(fields: [idemployee], references: [idemployees], onDelete: NoAction, onUpdate: NoAction, map: "idemployee")
 
   @@index([idemployee], map: "idemployee_idx")
+}
+
+model idea_status {
+  id                 Int                 @id @default(autoincrement())
+  title              String?             @db.VarChar(1000)
+  content            String?             @db.Text
+  author             Int?
+  date_posted        DateTime?           @default(now()) @db.DateTime(0)
+  status             String?             @db.VarChar(50)
+  users_for_employee users_for_employee? @relation(fields: [author], references: [idusers_for_employee], onDelete: NoAction, onUpdate: NoAction, map: "idea_status_ibfk_1")
+
+  @@index([author], map: "idea_status_ibfk_1_idx")
+}
+
+model ideas {
+  id                 Int                 @id @default(autoincrement())
+  title              String?             @db.VarChar(1000)
+  content            String?             @db.VarChar(1000)
+  author             Int?
+  date_posted        DateTime?           @db.DateTime(0)
+  yes_vote           Int?
+  no_vote            Int?
+  users_for_employee users_for_employee? @relation(fields: [author], references: [idusers_for_employee], onDelete: NoAction, onUpdate: NoAction, map: "fk_author_id")
+
+  @@index([author], map: "fk_author_id_idx")
+}
+
+model users_for_employee {
+  idusers_for_employee Int           @id @default(autoincrement())
+  username             String?       @db.VarChar(45)
+  password             String?       @db.VarChar(45)
+  employee_id          Int?
+  idea_status          idea_status[]
+  ideas                ideas[]
+  employees            employees?    @relation(fields: [employee_id], references: [idemployees], onDelete: NoAction, onUpdate: NoAction, map: "fk_emp_id")
+
+  @@index([username], map: "fk_author_idx")
+  @@index([employee_id], map: "fk_emp_id_idx")
 }
